@@ -10,7 +10,7 @@ func RegisterRoutes() *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	r.Get("/met/departments", handlers.MetDepartments)
+	r.Get("api/met/departments", handlers.MetDepartments)
 
 	return r
 }
