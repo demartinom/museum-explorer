@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -10,7 +11,9 @@ import (
 
 func main() {
 	// Load .env file
-	godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
 
 	// Creates server at port 3000
 	r := routes.RegisterRoutes()
