@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Returns a list of all departments within the Met
 func MetDepartments(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get("https://collectionapi.metmuseum.org/public/collection/v1/departments")
 	if err != nil {
