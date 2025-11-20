@@ -1,7 +1,7 @@
 package routes
 
 import (
-	metHandlers "github.com/demartinom/museum-explorer/server/pkg/handlers/met"
+	"github.com/demartinom/museum-explorer/server/pkg/handlers/methandlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -12,7 +12,7 @@ func RegisterRoutes() *chi.Mux {
 
 	// Registers routes that belong to the met
 	// They will all fall under /api/met
-	r.Route("/api/met", func(r chi.Router) { r.Get("api/met/departments", metHandlers.MetDepartments) })
+	r.Route("/api/met", func(r chi.Router) { r.Get("/departments", methandlers.DepartmentsHandler) })
 
 	return r
 }
