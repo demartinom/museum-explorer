@@ -10,3 +10,7 @@ type MetSingleDepartment struct {
 	DepartmentID int    `json:"departmentId"`
 	DisplayName  string `json:"displayName"`
 }
+
+type MetClient struct {
+	BaseURL string
+}
