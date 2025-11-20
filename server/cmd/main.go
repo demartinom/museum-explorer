@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -18,5 +19,6 @@ func main() {
 	// Creates server at port 3000
 	r := routes.RegisterRoutes()
 	port := os.Getenv("PORT")
+	fmt.Println("Server now running")
 	http.ListenAndServe(port, r)
 }
