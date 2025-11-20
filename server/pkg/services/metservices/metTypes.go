@@ -1,4 +1,8 @@
-package met
+package metservices
+
+type MetClient struct {
+	BaseURL string
+}
 
 // Returns an array of the different departments within the Met
 type MetDepartments struct {
@@ -11,6 +15,6 @@ type MetSingleDepartment struct {
 	DisplayName  string `json:"displayName"`
 }
 
-type MetClient struct {
-	BaseURL string
+type DepartmentsResponse struct {
+	Departments []MetSingleDepartment `json:"departments"`
 }
