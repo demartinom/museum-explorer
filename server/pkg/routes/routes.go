@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+// Creates routes for different API calls on server startup
 func RegisterRoutes() *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)

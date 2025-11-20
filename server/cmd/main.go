@@ -16,9 +16,10 @@ func main() {
 		log.Println("No .env file found")
 	}
 
-	// Creates server at port 3000
+	// Creates server at port listed in .env file
 	r := routes.RegisterRoutes()
 	port := os.Getenv("PORT")
+
 	fmt.Println("Server now running")
 	http.ListenAndServe(port, r)
 }

@@ -13,14 +13,16 @@ func NewClient() *MetClient {
 
 // Returns a list of all departments within the Met
 func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
+	// Takes base Met url from client and adds departments to the end
 	url := fmt.Sprintf("%s/departments", c.BaseURL)
-	fmt.Println(url)
+
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
+	// Instance of DepartmentsResponse struct for data to be put into
 	var result DepartmentsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, err
