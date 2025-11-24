@@ -20,3 +20,21 @@ type MetSingleDepartment struct {
 	DepartmentID int    `json:"departmentId"`
 	DisplayName  string `json:"displayName"`
 }
+
+// Returns ID's of all highlights in the Met collection
+type GetHighlightIDs struct {
+	ObjectIds []int `json:"objectIds"`
+}
+
+// Struct for a single piece of art from the Met
+type MetSingleArtwork struct {
+	ObjectID          int    `json:"objectID"`
+	IsHighlight       bool   `json:"isHightlight"`
+	PrimaryImage      string `json:"primaryImage"`
+	PrimaryImageSmall string `json:"primaryImageSmall"`
+	Department        string `json:"department"`
+	ObjectName        string `json:"objectName"`
+	Title             string `json:"title"`
+	ArtistDisplayName string `json:"artistDisplayName"`
+	ObjectDate        string `json:"objectDate"`
+}
