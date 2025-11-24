@@ -13,7 +13,10 @@ func RegisterRoutes() *chi.Mux {
 
 	// Registers routes that belong to the met
 	// They will all fall under /api/met
-	r.Route("/api/met", func(r chi.Router) { r.Get("/departments", methandlers.DepartmentsHandler) })
+	r.Route("/api/met", func(r chi.Router) {
+		r.Get("/departments", methandlers.DepartmentsHandler)
+		r.Get("/random", methandlers.RandomHandler)
+	})
 
 	return r
 }
