@@ -29,7 +29,7 @@ type GetHighlightIDs struct {
 // Struct for a single piece of art from the Met
 type MetSingleArtwork struct {
 	ObjectID          int    `json:"objectID"`
-	IsHighlight       bool   `json:"isHightlight"`
+	IsHighlight       bool   `json:"isHighlight"`
 	PrimaryImage      string `json:"primaryImage"`
 	PrimaryImageSmall string `json:"primaryImageSmall"`
 	Department        string `json:"department"`
