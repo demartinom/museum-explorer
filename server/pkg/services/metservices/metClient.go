@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+
+	"github.com/demartinom/museum-explorer/server/pkg/services/core"
 )
 
 // Initialize a new client for the Met API
@@ -76,4 +78,16 @@ func (c *MetClient) GetSpecific(objectID int) (*MetSingleArtwork, error) {
 		return nil, err
 	}
 	return &result, nil
+}
+
+// Calls function to get random artwork and put it in Core artwork struct
+func (c *MetClient) FetchRandom() (*core.Artwork, error) {
+	selectedArt, _ := c.GetRandom()
+
+	return &core.Artwork{
+		Title:    selectedArt.Title,
+		Artist:   selectedArt.ArtistDisplayName,
+		ImageURL: selectedArt.PrimaryImage,
+		Museum:   "Metropolitan Museum of Art",
+	}, nil
 }
