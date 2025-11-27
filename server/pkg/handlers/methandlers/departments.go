@@ -7,6 +7,7 @@ import (
 	"github.com/demartinom/museum-explorer/server/pkg/services/metservices"
 )
 
+// Client to be used by all Met handlers
 var client = metservices.NewClient()
 
 // Handler that makes API call to department endpoint on Met API
