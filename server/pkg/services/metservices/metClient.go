@@ -29,21 +29,26 @@ func fetchJSON[T any](url string) (*T, error) {
 	return &result, nil
 }
 
+// Returns a list of all departments within the Met
+func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
+	// Takes base Met url from client and adds departments to the end
+	url := fmt.Sprintf("%s/departments", c.BaseURL)
+
+	return fetchJSON[DepartmentsResponse](url)
+}
+
 // Gets a list of Art IDs for the highlights of the Met and then returns a random artwork from the highlights
 func (c *MetClient) GetRandom() (*MetSingleArtwork, error) {
-	url := fmt.Sprintf("%s/search?q=isHightlight=true", c.BaseURL)
+	url := fmt.Sprintf("%s/search?q=&isHighlight=true", c.BaseURL)
 
-	resp, err := http.Get(url)
+	randomResult, err := fetchJSON[GetHighlightIDs](url)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
-	var randomResult GetHighlightIDs
-	if err := json.NewDecoder(resp.Body).Decode(&randomResult); err != nil {
-		return nil, err
-	}
 
-	// TODO: Ensure it doesn't return something blank or with no picture
+	if len(randomResult.ObjectIds) == 0 {
+		return nil, fmt.Errorf("no highlight artworks returned from API")
+	}
 	// Selects a random ID
 	randArtworkID := rand.Intn(len(randomResult.ObjectIds))
 
