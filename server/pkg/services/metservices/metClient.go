@@ -43,19 +43,19 @@ func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
 func (c *MetClient) GetRandom() (*MetSingleArtwork, error) {
 	url := fmt.Sprintf("%s/search?q=&isHighlight=true", c.BaseURL)
 
-	randomResult, err := fetchJSON[GetHighlightIDs](url)
+	HighlightIDs, err := fetchJSON[GetHighlightIDs](url)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(randomResult.ObjectIds) == 0 {
+	if len(HighlightIDs.ObjectIds) == 0 {
 		return nil, fmt.Errorf("no highlight artworks returned from API")
 	}
 	// Selects a random ID
-	randArtworkID := rand.Intn(len(randomResult.ObjectIds))
+	randArtworkID := rand.Intn(len(HighlightIDs.ObjectIds))
 
 	// Gets information for randomly selected artwork
-	result, err := c.GetSpecific(randomResult.ObjectIds[randArtworkID])
+	result, err := c.GetSpecific(HighlightIDs.ObjectIds[randArtworkID])
 	if err != nil {
 		return nil, err
 	}
