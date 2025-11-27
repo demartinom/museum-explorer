@@ -12,19 +12,16 @@ func NewClient() *MetClient {
 	return &MetClient{BaseURL: "https://collectionapi.metmuseum.org/public/collection/v1"}
 }
 
-// Returns a list of all departments within the Met
-func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
-	// Takes base Met url from client and adds departments to the end
-	url := fmt.Sprintf("%s/departments", c.BaseURL)
-
+// Reusable function for making API calls
+// Uses type parameter of T for inputting structs into function
+func fetchJSON[T any](url string) (*T, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	// Instance of DepartmentsResponse struct for data to be put into
-	var result DepartmentsResponse
+	var result T
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, err
 	}
