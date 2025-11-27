@@ -67,23 +67,14 @@ func (c *MetClient) GetRandom() (*MetSingleArtwork, error) {
 func (c *MetClient) GetSpecific(objectID int) (*MetSingleArtwork, error) {
 	url := fmt.Sprintf("%s/objects/%d", c.BaseURL, objectID)
 
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var result MetSingleArtwork
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return fetchJSON[MetSingleArtwork](url)
 }
 
 // Calls function to get random artwork and put it in Core artwork struct
 func (c *MetClient) FetchRandom() (*core.Artwork, error) {
 	selectedArt, _ := c.GetRandom()
 
+	// Shared type for all different museums
 	return &core.Artwork{
 		Title:    selectedArt.Title,
 		Artist:   selectedArt.ArtistDisplayName,
