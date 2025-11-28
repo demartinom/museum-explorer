@@ -1,4 +1,4 @@
-package met
+package metmuseum
 
 // Init new Client for Met API calls
 type MetClient struct {

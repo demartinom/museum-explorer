@@ -1,4 +1,4 @@
-package met
+package metmuseum
 
 import (
 	"encoding/json"
