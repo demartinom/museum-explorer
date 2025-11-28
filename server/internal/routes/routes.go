@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"github.com/demartinom/museum-explorer/server/internal/daily"
+	"github.com/demartinom/museum-explorer/server/internal/handlers/dailyhandlers"
 	"github.com/demartinom/museum-explorer/server/internal/handlers/methandlers"
 	"github.com/demartinom/museum-explorer/server/internal/museums/metmuseum"
 	"github.com/go-chi/chi/v5"
@@ -8,8 +10,8 @@ import (
 )
 
 // Creates routes for different API calls on server startup
-// Takes in metClient from main.go and passes it into handlers
-func RegisterRoutes(metClient *metmuseum.MetClient) *chi.Mux {
+// Takes in clients from main.go and passes them into respective handlers
+func RegisterRoutes(metClient *metmuseum.MetClient, dailyArt *daily.DailyArtworkManager) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
@@ -17,7 +19,11 @@ func RegisterRoutes(metClient *metmuseum.MetClient) *chi.Mux {
 	// They will all fall under /api/met
 	r.Route("/api/met", func(r chi.Router) {
 		r.Get("/departments", methandlers.DepartmentsHandler(metClient))
-		r.Get("/random", methandlers.RandomHandler(metClient))
+	})
+	// Register daily routes
+	// They will all fall under /api/daily
+	r.Route("/api/daily", func(r chi.Router) {
+		r.Get("/dailyartwork", dailyhandlers.DailyArtworkHandler(dailyArt))
 	})
 
 	return r
