@@ -40,7 +40,7 @@ func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
 }
 
 // Gets a list of Art IDs for the highlights of the Met and then returns a random artwork from the highlights
-func (c *MetClient) GetRandom() (*MetSingleArtwork, error) {
+func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
 	url := fmt.Sprintf("%s/search?q=&isHighlight=true", c.BaseURL)
 
 	HighlightIDs, err := fetchJSON[GetHighlightIDs](url)
@@ -71,8 +71,8 @@ func (c *MetClient) GetSpecific(objectID int) (*MetSingleArtwork, error) {
 }
 
 // Calls function to get random artwork and put it in Core artwork struct
-func (c *MetClient) FetchRandomDaily() (*core.Artwork, error) {
-	selectedArt, _ := c.GetRandom()
+func (c *MetClient) GetRandomArtwork() (*core.Artwork, error) {
+	selectedArt, _ := c.FetchRandom()
 
 	// Shared type for all different museums
 	return &core.Artwork{

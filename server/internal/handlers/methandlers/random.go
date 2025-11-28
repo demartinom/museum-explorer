@@ -7,7 +7,7 @@ import (
 
 // Handler that makes API call return random artwork from the Met's highlights for the Artwork of the day
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := client.FetchRandomDaily()
+	data, err := MetClient.GetRandomArtwork()
 	if err != nil {
 		http.Error(w, "Failed to fetch Met API", http.StatusBadGateway)
 		return
