@@ -23,7 +23,7 @@ func (m *DailyArtworkManager) GetArt() *core.Artwork {
 func (m *DailyArtworkManager) SetArtwork(a *core.Artwork) {
 	m.mu.Lock()
 
-	defer m.mu.Lock()
+	defer m.mu.Unlock()
 
 	m.Artwork = a
 }
