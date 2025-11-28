@@ -18,7 +18,7 @@ func DailyArtworkHandler(manager *daily.DailyArtworkManager) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK) // optional, default is 200
+		w.WriteHeader(http.StatusOK)
 
 		if err := json.NewEncoder(w).Encode(art); err != nil {
 			http.Error(w, "Failed to encode JSON", http.StatusInternalServerError)

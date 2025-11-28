@@ -72,7 +72,10 @@ func (c *MetClient) GetSpecific(objectID int) (*MetSingleArtwork, error) {
 
 // Calls function to get random artwork and put it in Core artwork struct
 func (c *MetClient) GetRandomArtwork() (*core.Artwork, error) {
-	selectedArt, _ := c.FetchRandom()
+	selectedArt, err := c.FetchRandom()
+	if err != nil {
+		return nil, err
+	}
 
 	// Shared type for all different museums
 	return &core.Artwork{
