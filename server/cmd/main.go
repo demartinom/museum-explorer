@@ -20,6 +20,7 @@ func main() {
 
 	//Create Global Met client
 	metClient := metmuseum.NewClient()
+
 	// Create daily art struct and begin daily refresh of art
 	dailyArt := daily.NewDailyArtworkManager()
 	dailyArt.Start(metClient)
