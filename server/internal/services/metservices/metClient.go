@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	"github.com/demartinom/museum-explorer/server/pkg/services/core"
+	"github.com/demartinom/museum-explorer/server/internal/services/core"
 )
 
 // Initialize a new client for the Met API

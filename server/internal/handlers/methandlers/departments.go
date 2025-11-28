@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/demartinom/museum-explorer/server/pkg/services/metservices"
+	"github.com/demartinom/museum-explorer/server/internal/services/metservices"
 )
 
 // Client to be used by all Met handlers

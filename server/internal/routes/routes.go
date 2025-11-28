@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/demartinom/museum-explorer/server/pkg/handlers/methandlers"
+	"github.com/demartinom/museum-explorer/server/internal/handlers/methandlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )

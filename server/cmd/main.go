@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/demartinom/museum-explorer/server/pkg/routes"
+	"github.com/demartinom/museum-explorer/server/internal/routes"
 	"github.com/joho/godotenv"
 )
 
