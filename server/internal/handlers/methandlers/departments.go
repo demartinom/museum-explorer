@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/demartinom/museum-explorer/server/internal/services/metservices"
+	"github.com/demartinom/museum-explorer/server/internal/museums/met"
 )
 
 // Client to be used by all Met handlers
-var client = metservices.NewClient()
+var client = met.NewClient()
 
 // Handler that makes API call to department endpoint on Met API
 func DepartmentsHandler(w http.ResponseWriter, r *http.Request) {

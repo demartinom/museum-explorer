@@ -1,4 +1,4 @@
-package metservices
+package met
 
 // Init new Client for Met API calls
 type MetClient struct {

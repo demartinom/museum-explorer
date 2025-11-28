@@ -1,4 +1,4 @@
-package metservices
+package met
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	"github.com/demartinom/museum-explorer/server/internal/services/core"
+	"github.com/demartinom/museum-explorer/server/internal/core"
 )
 
 // Initialize a new client for the Met API
