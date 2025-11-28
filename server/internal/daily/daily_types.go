@@ -7,11 +7,13 @@ import (
 	"github.com/demartinom/museum-explorer/server/internal/core"
 )
 
+// Struct for holding the artwork of the day
 type DailyArtworkManager struct {
 	mu      sync.RWMutex
 	Artwork *core.Artwork
 }
 
+// Allows functions to receive the selected artwork of they day
 func (m *DailyArtworkManager) GetArt() *core.Artwork {
 	m.mu.RLock()
 
@@ -20,6 +22,7 @@ func (m *DailyArtworkManager) GetArt() *core.Artwork {
 	return m.Artwork
 }
 
+// Takes the randomly selected artwork and sets it as the Artwork of the day
 func (m *DailyArtworkManager) SetArtwork(a *core.Artwork) {
 	m.mu.Lock()
 
@@ -28,6 +31,7 @@ func (m *DailyArtworkManager) SetArtwork(a *core.Artwork) {
 	m.Artwork = a
 }
 
+// Spins up a new daily artwork manager
 func (m *DailyArtworkManager) Start(client core.MuseumClient) {
 	go func() {
 		for {
