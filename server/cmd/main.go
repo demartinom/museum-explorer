@@ -25,7 +25,7 @@ func main() {
 	dailyArt.Start(metClient)
 
 	// Creates server at port listed in .env file
-	r := routes.RegisterRoutes(metClient)
+	r := routes.RegisterRoutes(metClient, dailyArt)
 	port := os.Getenv("PORT")
 
 	fmt.Println("Server now running")
