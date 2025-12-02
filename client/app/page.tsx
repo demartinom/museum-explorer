@@ -1,5 +1,5 @@
 import { apiGet } from "@/lib/apiGet";
-import { DailyArtwork } from "@/types/dailyartwork";
+import { DailyArtwork } from "@/types/daily-artwork";
 import Image from "next/image";
 
 export const metadata = {
