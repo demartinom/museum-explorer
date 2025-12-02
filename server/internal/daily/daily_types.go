@@ -9,15 +9,15 @@ import (
 
 // Struct for holding the artwork of the day
 type DailyArtworkManager struct {
-	mu      sync.RWMutex
+	mu      sync.Mutex
 	Artwork *core.Artwork
 }
 
 // Allows functions to receive the selected artwork of they day
 func (m *DailyArtworkManager) GetArt() *core.Artwork {
-	m.mu.RLock()
+	m.mu.Lock()
 
-	defer m.mu.RUnlock()
+	defer m.mu.Unlock()
 
 	return m.Artwork
 }
