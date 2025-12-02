@@ -2,9 +2,6 @@ import { apiGet } from "@/lib/apiGet";
 import { DailyArtwork } from "@/types/daily-artwork";
 import Image from "next/image";
 
-export const metadata = {
-  title: "Museum Explorer",
-};
 export default async function Home() {
   // Retrieve artwork of the day
   const daily = await apiGet<DailyArtwork>("/daily/dailyartwork");
