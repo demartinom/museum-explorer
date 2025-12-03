@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/demartinom/museum-explorer/server/internal/daily"
+	"github.com/demartinom/museum-explorer/server/internal/handlers"
 	"github.com/demartinom/museum-explorer/server/internal/handlers/dailyhandlers"
 	"github.com/demartinom/museum-explorer/server/internal/handlers/methandlers"
 	"github.com/demartinom/museum-explorer/server/internal/museums/metmuseum"
@@ -24,6 +25,11 @@ func RegisterRoutes(metClient *metmuseum.MetClient, dailyArt *daily.DailyArtwork
 	// They will all fall under /api/daily
 	r.Route("/api/daily", func(r chi.Router) {
 		r.Get("/dailyartwork", dailyhandlers.DailyArtworkHandler(dailyArt))
+	})
+	// Route for general museum endpoints
+	r.Route("/api/museums", func(r chi.Router) {
+		// Returns list of all museums who's APIs are used
+		r.Get("/", handlers.MuseumListHandler())
 	})
 
 	return r
