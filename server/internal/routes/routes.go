@@ -18,7 +18,7 @@ func RegisterRoutes(metClient *metmuseum.MetClient, dailyArt *daily.DailyArtwork
 
 	// Registers routes that belong to the met
 	// They will all fall under /api/met
-	r.Route("/api/met", func(r chi.Router) {
+	r.Route("/api/metmuseum", func(r chi.Router) {
 		r.Get("/departments", methandlers.DepartmentsHandler(metClient))
 	})
 	// Register daily routes
