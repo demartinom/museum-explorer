@@ -3,6 +3,8 @@ import { Museumlist } from "@/types/museum-list";
 
 export default async function Museums() {
   const museumArray = await apiGet<Museumlist>("/museums");
+
+  // Returns a list of museums the site has access to
   const museumlist = museumArray.map((museum) => {
     return (
       <a href={`/museums/${museum.slug}`} key={museum.slug}>
@@ -10,6 +12,7 @@ export default async function Museums() {
       </a>
     );
   });
+
   return (
     <div>
       <h1>Explore Museum Collections</h1>
