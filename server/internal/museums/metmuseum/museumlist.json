@@ -1,0 +1,7 @@
+[
+  {
+    "name": "The Metropolitan Museum of Art",
+    "slug": "metmuseum",
+    "apiBase": "https://collectionapi.metmuseum.org/public/collection/v1/"
+  }
+]
