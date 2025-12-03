@@ -20,7 +20,7 @@ func DepartmentsHandler(client *metmuseum.MetClient) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK) // optional, default is 200
 
-		if err := json.NewEncoder(w).Encode(data); err != nil {
+		if err := json.NewEncoder(w).Encode(data.Departments); err != nil {
 			http.Error(w, "Failed to encode JSON", http.StatusInternalServerError)
 		}
 	}
