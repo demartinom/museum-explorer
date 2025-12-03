@@ -8,6 +8,7 @@ export default async function Home() {
 
   return (
     <div>
+      <a href="/museums">Explore Museums</a>
       <div>
         <p>{daily.Title}</p>
         <p>{daily.Artist == "" ? "Artist Unknown" : daily.Artist}</p>
