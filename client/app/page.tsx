@@ -1,6 +1,7 @@
 import { apiGet } from "@/lib/apiGet";
 import { DailyArtwork } from "@/types/daily-artwork";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
   // Retrieve artwork of the day
@@ -8,7 +9,7 @@ export default async function Home() {
 
   return (
     <div>
-      <a href="/museums">Explore Museums</a>
+      <Link href="/museums">Explore Museums</Link>
       <div>
         <p>{daily.Title}</p>
         <p>{daily.Artist == "" ? "Artist Unknown" : daily.Artist}</p>

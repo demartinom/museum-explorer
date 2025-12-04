@@ -1,5 +1,6 @@
 import { apiGet } from "@/lib/apiGet";
 import { Museumlist } from "@/types/museum-list";
+import Link from "next/link";
 
 export default async function Museums() {
   const museumArray = await apiGet<Museumlist>("/museums");
@@ -7,9 +8,9 @@ export default async function Museums() {
   // Returns a list of museums the site has access to
   const museumlist = museumArray.map((museum) => {
     return (
-      <a href={`/museums/${museum.slug}`} key={museum.slug}>
+      <Link href={`/museums/${museum.slug}`} key={museum.slug}>
         <p>{museum.name}</p>
-      </a>
+      </Link>
     );
   });
 
