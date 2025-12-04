@@ -1,8 +1,14 @@
 package metmuseum
 
+import "sync"
+
 // Init new Client for Met API calls
 type MetClient struct {
 	BaseURL string
+	// mu for reading and writing safely
+	mu sync.RWMutex
+	// Map of departments with an array of the highlight IDs found in the department
+	departmentCache map[int][]int
 }
 
 // Returns an array of the different departments within the Met
