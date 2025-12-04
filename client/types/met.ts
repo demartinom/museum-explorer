@@ -1,4 +1,4 @@
-interface MetDepartment {
+export interface MetDepartment {
   departmentId: number;
   displayName: string;
 }
