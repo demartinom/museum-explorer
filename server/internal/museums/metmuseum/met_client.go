@@ -85,3 +85,31 @@ func (c *MetClient) GetRandomArtwork() (*core.Artwork, error) {
 		Museum:   "Metropolitan Museum of Art",
 	}, nil
 }
+
+// Gets the IDs of the highlights in a specific department
+// If a cache of IDs doesn't exist, makes one
+// Saves department highlight IDs in cache
+func (c *MetClient) DepartmentHighlights(departmentID int) ([]int, error) {
+	c.mu.RLock()
+	// If cache already exists for department, return IDs
+	if ids, ok := c.departmentCache[departmentID]; ok {
+		c.mu.RUnlock()
+		return ids, nil
+	}
+	c.mu.RUnlock()
+	// API call to receive highlights from specific department
+	url := fmt.Sprintf("%s/search?q=&departmentId=%d&isHighlight=true", c.BaseURL, departmentID)
+	data, err := fetchJSON[GetHighlightIDs](url)
+	if err != nil {
+		return nil, err
+	}
+
+	c.mu.Lock()
+	if c.departmentCache == nil {
+		c.departmentCache = make(map[int][]int)
+	}
+	c.departmentCache[departmentID] = data.ObjectIds
+
+	c.mu.Unlock()
+	return data.ObjectIds, nil
+}
