@@ -8,7 +8,7 @@ type MetClient struct {
 	// mu for reading and writing safely
 	mu sync.RWMutex
 	// Map of departments with an array of the highlight IDs found in the department
-	departmentCache map[int][]int
+	DepartmentCache map[int][]int
 }
 
 // Returns an array of the different departments within the Met
