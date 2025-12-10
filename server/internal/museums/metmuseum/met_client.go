@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"os"
 
 	"github.com/demartinom/museum-explorer/server/internal/core"
 )
@@ -39,23 +40,24 @@ func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
 	return fetchJSON[DepartmentsResponse](url)
 }
 
-// Gets a list of Art IDs for the highlights of the Met and then returns a random artwork from the highlights
+// Selects a random highlight from the Met
 func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
-	url := fmt.Sprintf("%s/search?q=&isHighlight=true", c.BaseURL)
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 
-	HighlightIDs, err := fetchJSON[GetHighlightIDs](url)
-	if err != nil {
-		return nil, err
+	// Randomly select a department ID
+	var departments []int
+	for deptID := range c.HighlightsCache {
+		departments = append(departments, deptID)
 	}
+	randomDepartment := departments[rand.Intn(len(departments))]
 
-	if len(HighlightIDs.ObjectIds) == 0 {
-		return nil, fmt.Errorf("no highlight artworks returned from API")
-	}
-	// Selects a random ID
-	randArtworkID := rand.Intn(len(HighlightIDs.ObjectIds))
+	// Randomly choose an object from the randomly selected department
+	objects := c.HighlightsCache[randomDepartment]
+	randomObject := objects[rand.Intn(len(objects))]
 
 	// Gets information for randomly selected artwork
-	result, err := c.GetSpecific(HighlightIDs.ObjectIds[randArtworkID])
+	result, err := c.GetSpecific(randomObject)
 	if err != nil {
 		return nil, err
 	}
