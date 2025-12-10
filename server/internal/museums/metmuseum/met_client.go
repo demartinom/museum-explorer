@@ -86,30 +86,35 @@ func (c *MetClient) GetRandomArtwork() (*core.Artwork, error) {
 	}, nil
 }
 
-// Gets the IDs of the highlights in a specific department
-// If a cache of IDs doesn't exist, makes one
-// Saves department highlight IDs in cache
-func (c *MetClient) DepartmentHighlights(departmentID int) ([]int, error) {
-	c.mu.RLock()
-	// If cache already exists for department, return IDs
-	if ids, ok := c.departmentCache[departmentID]; ok {
-		c.mu.RUnlock()
-		return ids, nil
-	}
-	c.mu.RUnlock()
-	// API call to receive highlights from specific department
-	url := fmt.Sprintf("%s/search?q=&departmentId=%d&isHighlight=true", c.BaseURL, departmentID)
-	data, err := fetchJSON[GetHighlightIDs](url)
+// Reads JSON with list of Met highlights
+// Creates a new cache if one doesn't exist
+// Saves highlight ids in map organized by department
+func (c *MetClient) DepartmentHighlights(filename string) error {
+	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return err
+	}
+	defer file.Close()
+	var highlights []MetHighlightEntry
+
+	if err := json.NewDecoder(file).Decode(&highlights); err != nil {
+		return err
+	}
+	if c.HighlightsCache == nil {
+		c.HighlightsCache = make(map[int][]int)
+	}
+
+	tempCache := make(map[int][]int)
+
+	for _, highlight := range highlights {
+		tempCache[highlight.DepartmentID] = append(tempCache[highlight.DepartmentID], highlight.ObjectID)
 	}
 
 	c.mu.Lock()
-	if c.departmentCache == nil {
-		c.departmentCache = make(map[int][]int)
+	for deptID, ids := range tempCache {
+		c.HighlightsCache[deptID] = append(c.HighlightsCache[deptID], ids...)
 	}
-	c.departmentCache[departmentID] = data.ObjectIds
 
 	c.mu.Unlock()
-	return data.ObjectIds, nil
+	return nil
 }
