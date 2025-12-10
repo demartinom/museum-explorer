@@ -47,13 +47,13 @@ func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
 
 	// Randomly select a department ID
 	var departments []int
-	for deptID := range c.HighlightsCache {
+	for deptID := range c.HighlightsIDCache {
 		departments = append(departments, deptID)
 	}
 	randomDepartment := departments[rand.Intn(len(departments))]
 
 	// Randomly choose an object from the randomly selected department
-	objects := c.HighlightsCache[randomDepartment]
+	objects := c.HighlightsIDCache[randomDepartment]
 	randomObject := objects[rand.Intn(len(objects))]
 
 	// Gets information for randomly selected artwork
@@ -102,8 +102,8 @@ func (c *MetClient) DepartmentHighlights(filename string) error {
 	if err := json.NewDecoder(file).Decode(&highlights); err != nil {
 		return err
 	}
-	if c.HighlightsCache == nil {
-		c.HighlightsCache = make(map[int][]int)
+	if c.HighlightsIDCache == nil {
+		c.HighlightsIDCache = make(map[int][]int)
 	}
 
 	tempCache := make(map[int][]int)
@@ -114,7 +114,7 @@ func (c *MetClient) DepartmentHighlights(filename string) error {
 
 	c.mu.Lock()
 	for deptID, ids := range tempCache {
-		c.HighlightsCache[deptID] = append(c.HighlightsCache[deptID], ids...)
+		c.HighlightsIDCache[deptID] = append(c.HighlightsIDCache[deptID], ids...)
 	}
 
 	c.mu.Unlock()
