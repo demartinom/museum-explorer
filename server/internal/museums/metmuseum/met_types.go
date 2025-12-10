@@ -7,8 +7,8 @@ type MetClient struct {
 	BaseURL string
 	// mu for reading and writing safely
 	mu sync.RWMutex
-	// Map of departments with an array of the highlight IDs found in the department
-	DepartmentCache map[int][]int
+	// Map of departments with a slice of the highlights found in the department
+	HighlightsCache map[int][]int
 }
 
 // Returns an array of the different departments within the Met
@@ -27,9 +27,9 @@ type MetSingleDepartment struct {
 	DisplayName  string `json:"displayName"`
 }
 
-// Returns ID's of all highlights in the Met collection
-type GetHighlightIDs struct {
-	ObjectIds []int `json:"objectIds"`
+type MetHighlightEntry struct {
+	ObjectID     int `json:"objectId"`
+	DepartmentID int `json:"departmentId"`
 }
 
 // Struct for a single piece of art from the Met
