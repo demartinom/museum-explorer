@@ -65,6 +65,53 @@ func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
 	return result, nil
 }
 
+// Returns a set number of highlights from a specific department at the Met, chosen randomly
+func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
+	// TODO: No duplicates
+	// TODO: no id = 0
+
+	//Reading lock for finding all highlight IDs in a specific department
+	c.mu.RLock()
+	deptHighlightIDs := c.HighlightsIDCache[dept]
+	if len(deptHighlightIDs) == 0 {
+		return fmt.Errorf("no highlight IDs for dept %d", dept)
+	}
+	c.mu.RUnlock()
+
+	// Make highlight cache if doesn't alreay exist
+	if c.CachedHighlights == nil {
+		c.CachedHighlights = make(map[int][]MetSingleArtwork)
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	// Make numHighlights # of calls to get random highglights and save them in cache.
+	for i := 0; i < numHighlights; i++ {
+		randomHighlight := deptHighlightIDs[rand.Intn(len(deptHighlightIDs))]
+		result, err := c.GetSpecific(randomHighlight)
+		if err != nil {
+			return err
+		}
+		c.CachedHighlights[dept] = append(c.CachedHighlights[dept], *result)
+		fmt.Printf("Cached artwork %d: %s\n", result.ObjectID, result.ObjectName)
+	}
+	return nil
+}
+
+// On startup, will run CacheHighlights for all deparments at the Met
+// getting 5 highlights per department
+func (c *MetClient) DeptHighlightsStartup() {
+	var departments []int
+	for deptID := range c.HighlightsIDCache {
+		departments = append(departments, deptID)
+	}
+
+	for id := range departments {
+		c.cacheHighlights(id, 5)
+	}
+}
+
 // Searches for specific work in collection using it's unique object ID
 func (c *MetClient) GetSpecific(objectID int) (*MetSingleArtwork, error) {
 	url := fmt.Sprintf("%s/objects/%d", c.BaseURL, objectID)
