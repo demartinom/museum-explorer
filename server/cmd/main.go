@@ -21,10 +21,14 @@ func main() {
 	//Create Global Met client
 	metClient := metmuseum.NewClient()
 	metClient.DepartmentHighlights("data/methighlights.json")
+
 	// Create daily art struct and begin daily refresh of art
 	dailyArt := daily.NewDailyArtworkManager()
 	dailyArt.Start(metClient)
+
+	// Cache first highlights
 	metClient.DeptHighlightsStartup()
+
 	// Creates server at port listed in .env file
 	r := routes.RegisterRoutes(metClient, dailyArt)
 	port := os.Getenv("PORT")
