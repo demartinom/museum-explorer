@@ -69,23 +69,22 @@ func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
 func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
 	// TODO: No duplicates
 	// TODO: no id = 0
-
+	// TODO: Add temp cache
 	//Reading lock for finding all highlight IDs in a specific department
 	c.mu.RLock()
 	deptHighlightIDs := c.HighlightsIDCache[dept]
+	c.mu.RUnlock()
+
 	if len(deptHighlightIDs) == 0 {
 		return fmt.Errorf("no highlight IDs for dept %d", dept)
 	}
-	c.mu.RUnlock()
 
 	// Make highlight cache if doesn't alreay exist
 	if c.CachedHighlights == nil {
 		c.CachedHighlights = make(map[int][]MetSingleArtwork)
 	}
-
 	c.mu.Lock()
 	defer c.mu.Unlock()
-
 	// Make numHighlights # of calls to get random highglights and save them in cache.
 	for i := 0; i < numHighlights; i++ {
 		randomHighlight := deptHighlightIDs[rand.Intn(len(deptHighlightIDs))]
@@ -93,9 +92,11 @@ func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
 		if err != nil {
 			return err
 		}
+
 		c.CachedHighlights[dept] = append(c.CachedHighlights[dept], *result)
 		fmt.Printf("Cached artwork %d: %s\n", result.ObjectID, result.ObjectName)
 	}
+
 	return nil
 }
 
