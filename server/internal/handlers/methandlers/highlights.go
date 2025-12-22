@@ -1,25 +1,32 @@
 package methandlers
 
-// func DepartmentHighlightsHandler(client *metmuseum.MetClient) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		idStr := chi.URLParam(r, "id")
+import (
+	"encoding/json"
+	"net/http"
+	"strconv"
 
-// 		departmentId, err := strconv.Atoi(idStr)
-// 		if err != nil {
-// 			return
-// 		}
+	"github.com/demartinom/museum-explorer/server/internal/museums/metmuseum"
+	"github.com/go-chi/chi/v5"
+)
 
-// 		data, err := client.DepartmentHighlights(departmentId)
-// 		if err != nil {
-// 			return
-// 		}
+func DepartmentHighlightsHandler(c *metmuseum.MetClient) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "id")
 
-// 		w.Header().Set("Content-Type", "application/json")
-// 		w.WriteHeader(http.StatusOK)
+		departmentID, err := strconv.Atoi(idStr)
+		if err != nil {
+			return
+		}
+		c.Mu.RLock()
+		data := c.CachedHighlights[departmentID]
+		c.Mu.RUnlock()
 
-// 		if err := json.NewEncoder(w).Encode(data); err != nil {
-// 			http.Error(w, "Failed to encode JSON", http.StatusInternalServerError)
-// 		}
-// 	}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 
-// }
+		if err := json.NewEncoder(w).Encode(data); err != nil {
+			http.Error(w, "failed to encode JSON", http.StatusInternalServerError)
+		}
+
+	}
+}
