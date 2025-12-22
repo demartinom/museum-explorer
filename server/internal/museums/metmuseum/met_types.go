@@ -9,6 +9,7 @@ type MetClient struct {
 	mu sync.RWMutex
 	// Map of departments with a slice of the highlights found in the department
 	HighlightsIDCache map[int][]int
+	CachedHighlights  map[int][]MetSingleArtwork
 }
 
 // Returns an array of the different departments within the Met
