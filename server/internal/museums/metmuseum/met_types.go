@@ -6,7 +6,7 @@ import "sync"
 type MetClient struct {
 	BaseURL string
 	// mu for reading and writing safely
-	mu sync.RWMutex
+	Mu sync.RWMutex
 	// Map of departments with a slice of the highlights found in the department
 	HighlightsIDCache map[int][]int
 	CachedHighlights  map[int][]MetSingleArtwork

@@ -42,8 +42,8 @@ func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
 
 // Selects a random highlight from the Met
 func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
-	c.mu.RLock()
-	defer c.mu.RUnlock()
+	c.Mu.RLock()
+	defer c.Mu.RUnlock()
 
 	// Randomly select a department ID
 	var departments []int
@@ -71,9 +71,9 @@ func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
 	// TODO: no id = 0
 	// TODO: Add temp cache
 	//Reading lock for finding all highlight IDs in a specific department
-	c.mu.RLock()
+	c.Mu.RLock()
 	deptHighlightIDs := c.HighlightsIDCache[dept]
-	c.mu.RUnlock()
+	c.Mu.RUnlock()
 
 	if len(deptHighlightIDs) == 0 {
 		return fmt.Errorf("no highlight IDs for dept %d", dept)
@@ -83,8 +83,8 @@ func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
 	if c.CachedHighlights == nil {
 		c.CachedHighlights = make(map[int][]MetSingleArtwork)
 	}
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.Mu.Lock()
+	defer c.Mu.Unlock()
 	// Make numHighlights # of calls to get random highglights and save them in cache.
 	for i := 0; i < numHighlights; i++ {
 		randomHighlight := deptHighlightIDs[rand.Intn(len(deptHighlightIDs))]
@@ -160,11 +160,11 @@ func (c *MetClient) DepartmentHighlights(filename string) error {
 		tempCache[highlight.DepartmentID] = append(tempCache[highlight.DepartmentID], highlight.ObjectID)
 	}
 
-	c.mu.Lock()
+	c.Mu.Lock()
 	for deptID, ids := range tempCache {
 		c.HighlightsIDCache[deptID] = append(c.HighlightsIDCache[deptID], ids...)
 	}
 
-	c.mu.Unlock()
+	c.Mu.Unlock()
 	return nil
 }
