@@ -8,7 +8,7 @@ import (
 )
 
 // Returns a set number of highlights from a specific department at the Met, chosen randomly
-func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
+func (c *MetClient) cacheHighlights(dept string, numHighlights int) error {
 	// TODO: No duplicates
 	// TODO: no id = 0
 	// TODO: Add temp cache
@@ -19,12 +19,12 @@ func (c *MetClient) cacheHighlights(dept int, numHighlights int) error {
 	c.Mu.RUnlock()
 
 	if len(deptHighlightIDs) == 0 {
-		return fmt.Errorf("no highlight IDs for dept %d", dept)
+		return fmt.Errorf("no highlight IDs for dept %s", dept)
 	}
 
 	// Make highlight cache if doesn't alreay exist
 	if c.CachedHighlights == nil {
-		c.CachedHighlights = make(map[int][]MetSingleArtwork)
+		c.CachedHighlights = make(map[string][]MetSingleArtwork)
 	}
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
@@ -59,13 +59,13 @@ func (c *MetClient) DepartmentHighlights(filename string) error {
 		return err
 	}
 	if c.HighlightsIDCache == nil {
-		c.HighlightsIDCache = make(map[int][]int)
+		c.HighlightsIDCache = make(map[string][]int)
 	}
 
-	tempCache := make(map[int][]int)
+	tempCache := make(map[string][]int)
 
 	for _, highlight := range highlights {
-		tempCache[highlight.DepartmentID] = append(tempCache[highlight.DepartmentID], highlight.ObjectID)
+		tempCache[highlight.Department] = append(tempCache[highlight.Department], highlight.ObjectID)
 	}
 
 	c.Mu.Lock()
@@ -80,13 +80,13 @@ func (c *MetClient) DepartmentHighlights(filename string) error {
 // On startup, will run CacheHighlights for all deparments at the Met
 // getting 5 highlights per department
 func (c *MetClient) DeptHighlightsStartup() {
-	var departments []int
+	var departments []string
 	for deptID := range c.HighlightsIDCache {
 		departments = append(departments, deptID)
 	}
 
-	for id := range departments {
-		c.cacheHighlights(id, 5)
+	for _, deptID := range departments {
+		c.cacheHighlights(deptID, 5)
 	}
 }
 
@@ -96,7 +96,7 @@ func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
 	defer c.Mu.RUnlock()
 
 	// Randomly select a department ID
-	var departments []int
+	var departments []string
 	for deptID := range c.HighlightsIDCache {
 		departments = append(departments, deptID)
 	}
