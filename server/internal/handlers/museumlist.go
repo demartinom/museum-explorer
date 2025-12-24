@@ -10,7 +10,7 @@ import (
 // Takes json list of museums and allows it to be sent to the frontend
 func MuseumListHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		museums, err := museums.LoadMuseums("internal/museums/metmuseum/museumlist.json")
+		museums, err := museums.LoadMuseums("data/museumlist.json")
 		if err != nil {
 			return
 		}

@@ -3,7 +3,6 @@ package metmuseum
 import (
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"net/http"
 
 	"github.com/demartinom/museum-explorer/server/internal/core"
@@ -37,30 +36,6 @@ func (c *MetClient) GetDepartments() (*DepartmentsResponse, error) {
 	url := fmt.Sprintf("%s/departments", c.BaseURL)
 
 	return fetchJSON[DepartmentsResponse](url)
-}
-
-// Gets a list of Art IDs for the highlights of the Met and then returns a random artwork from the highlights
-func (c *MetClient) FetchRandom() (*MetSingleArtwork, error) {
-	url := fmt.Sprintf("%s/search?q=&isHighlight=true", c.BaseURL)
-
-	HighlightIDs, err := fetchJSON[GetHighlightIDs](url)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(HighlightIDs.ObjectIds) == 0 {
-		return nil, fmt.Errorf("no highlight artworks returned from API")
-	}
-	// Selects a random ID
-	randArtworkID := rand.Intn(len(HighlightIDs.ObjectIds))
-
-	// Gets information for randomly selected artwork
-	result, err := c.GetSpecific(HighlightIDs.ObjectIds[randArtworkID])
-	if err != nil {
-		return nil, err
-	}
-
-	return result, nil
 }
 
 // Searches for specific work in collection using it's unique object ID

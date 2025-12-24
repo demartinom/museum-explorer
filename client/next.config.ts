@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       new URL("https://images.metmuseum.org/CRDImages/*/original/*"),
+      new URL("https://images.metmuseum.org/CRDImages/*/web-large/*"),
     ],
   },
 };
