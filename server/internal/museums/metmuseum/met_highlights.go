@@ -81,6 +81,25 @@ func (c *MetClient) DepartmentHighlights(filename string) error {
 // getting 5 highlights per department
 func (c *MetClient) DeptHighlightsStartup() {
 	var departments []string
+
+	if os.Getenv("DEV_CACHE") == "1" {
+		file, err := os.ReadFile("./data/cachedhighlights.json")
+		if err != nil {
+			return
+		}
+		var cachedHighlights []MetSingleArtwork
+		json.Unmarshal(file, &cachedHighlights)
+
+		// Make highlight cache if doesn't alreay exist
+		if c.CachedHighlights == nil {
+			c.CachedHighlights = make(map[string][]MetSingleArtwork)
+		}
+		for _, item := range cachedHighlights {
+			c.CachedHighlights[item.Department] = append(c.CachedHighlights[item.Department], item)
+		}
+		return
+	}
+
 	for deptID := range c.HighlightsIDCache {
 		departments = append(departments, deptID)
 	}
